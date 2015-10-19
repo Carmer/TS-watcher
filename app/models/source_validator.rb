@@ -12,18 +12,16 @@ module TrafficSpy
     end
 
     def validate
-      source = Source.new(@data)
-      require "pry"; binding.pry
-      if @identifier.nil? || @rootUrl.nil?
-        @status = 400
-        @body   = "One or more parameters is missing.
-                  Please check your request and resend."
-      elsif source.save
+      @source = Source.new(@data)
+      if @source.save
         @status = 200
-        @body   = {"identifier": "#{source.identifier}" }
+        @body   = "identifier: #{@source.identifier}"
+      elsif @identifier.nil? || @rootUrl.nil?
+        @status = 400
+        @body   = @source.errors.full_messages.join(", ")
       else
-        @status = 303
-        @body   = source.errors.full_messages.join(", ")
+        @status = 403
+        @body   = @source.errors.full_messages.join(", ")
       end
     end
   end

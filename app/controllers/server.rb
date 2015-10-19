@@ -14,5 +14,10 @@ module TrafficSpy
       response.status  = source.status
       response.body  = source.body
     end
+
+    post '/sources/:identifier/data' do |identifier|
+      
+
+    end
   end
 end
