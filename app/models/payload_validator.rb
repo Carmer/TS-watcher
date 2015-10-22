@@ -2,17 +2,15 @@ require 'digest/sha1'
 
 module TrafficSpy
   class PayloadValidator
-    attr_reader :body, :status
+    attr_reader :body, :status, :source
+
     def initialize(data = nil, identifier)
-     if !data.nil?
-        @payload = JSON.parse(data)
-      else
-        @payload = data
-      end
+      @data = JSON.parse(data) unless data.nil?
 
       @identifier = identifier
       @status = nil
       @body   = nil
+      @source = Source.find_by(identifier: @identifier)
       validate
     end
 
@@ -21,8 +19,8 @@ module TrafficSpy
     end
 
     def validate
-      source = Source.find_by(identifier: @identifier)
-      if @payload == "" || @payload == {} || @payload.nil?
+
+      if @data == "" || @data == {} || @data.nil?
         @status = 400
         @body = "Payload cannot be empty"
       elsif Source.find_by(identifier: @identifier).nil?
@@ -30,27 +28,27 @@ module TrafficSpy
         @body = "Identifier does not exist"
       else
 
-      @p = Payload.new(url: @payload["url"],
-                  parameters: @payload["parameters"],
-                  responded_in: @payload["respondedIn"],
-                  requested_at: @payload["requestedAt"],
-                  user_agent: @payload["userAgent"],
+      @payload = Payload.new(url: @data["url"],
+                  parameters: @data["parameters"],
+                  responded_in: @data["respondedIn"],
+                  requested_at: @data["requestedAt"],
+                  user_agent: @data["userAgent"],
                   source_id: source.id,
-                  event_name: @payload["eventName"],
-                  referred_by: @payload["referredBy"],
-                  resolution_width: @payload["resolutionWidth"],
-                  resolution_height: @payload["resolutionHeight"],
-                  request_type: @payload["requestType"],
-                  sha: sha(@payload),
-                  ip: @payload["ip"]
+                  event_name: @data["eventName"],
+                  referred_by: @data["referredBy"],
+                  resolution_width: @data["resolutionWidth"],
+                  resolution_height: @data["resolutionHeight"],
+                  request_type: @data["requestType"],
+                  sha: sha(@data),
+                  ip: @data["ip"]
                   )
 
-        if @p.save
+        if @payload.save
           @status = 200
           @body   = "identifier: #{@identifier}"
         else
           @status = 403
-          @body   = @p.errors.full_messages.join(", ")
+          @body   = @payload.errors.full_messages.join(", ")
         end
       end
 
