@@ -1,51 +1,26 @@
 class Master < ActiveRecord::Migration
   def change
-    create_table :addresses do |t|
-      t.string :ip
-    end
-
-    create_table :agents do |t|
-      t.string :user_agent
-    end
 
     create_table :sources do |t|
       t.string :identifier
       t.string :rootUrl
     end
 
-    create_table :events do |t|
-      t.string :event_name
-    end
-
     create_table :payloads do |t|
-      t.string :parameters
-      t.integer :responded_in
-      t.string :requested_at
-      t.integer :address_id
-      t.integer :agent_id
-      t.integer :client_id
-      t.integer :event_id
-      t.integer :referer_id
-      t.integer :request_id
-      t.integer :resolution_id
-      t.integer :tracked_site_id
-      t.string :composite_key
-    end
-
-    create_table :referers do |t|
-      t.string :referred_by
-    end
-
-    create_table :requests do |t|
-      t.string :request_type
-    end
-
-    create_table :resolutions do |t|
-      t.string :height_width
-    end
-
-    create_table :tracked_sites do |t|
       t.string :url
+      t.string :parameters
+      t.string :responded_in
+      t.string :requested_at
+      t.string :user_agent
+      t.string :source_id
+      t.string :event_name
+      t.string :referred_by
+      t.string :requested_at
+      t.string :resolution_width
+      t.string :resolution_height
+      t.string :request_type
+      t.string :sha
+      t.string :ip
     end
   end
 end

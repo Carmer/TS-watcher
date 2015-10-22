@@ -4,7 +4,6 @@ gem 'sinatra', require: 'sinatra/base'
 gem 'pg'
 gem 'activerecord'
 gem 'sinatra-activerecord'
-gem 'responders'
 gem 'pry'
 
 group :development, :test do

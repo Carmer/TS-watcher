@@ -16,52 +16,25 @@ ActiveRecord::Schema.define(version: 20151019134220) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "addresses", force: :cascade do |t|
-    t.string "ip"
-  end
-
-  create_table "agents", force: :cascade do |t|
-    t.string "user_agent"
-  end
-
-  create_table "events", force: :cascade do |t|
-    t.string "event_name"
-  end
-
   create_table "payloads", force: :cascade do |t|
-    t.string  "parameters"
-    t.integer "responded_in"
-    t.string  "requested_at"
-    t.integer "address_id"
-    t.integer "agent_id"
-    t.integer "client_id"
-    t.integer "event_id"
-    t.integer "referer_id"
-    t.integer "request_id"
-    t.integer "resolution_id"
-    t.integer "tracked_site_id"
-    t.string  "composite_key"
-  end
-
-  create_table "referers", force: :cascade do |t|
+    t.string "url"
+    t.string "parameters"
+    t.string "responded_in"
+    t.string "requested_at"
+    t.string "user_agent"
+    t.string "source_id"
+    t.string "event_name"
     t.string "referred_by"
-  end
-
-  create_table "requests", force: :cascade do |t|
+    t.string "resolution_width"
+    t.string "resolution_height"
     t.string "request_type"
-  end
-
-  create_table "resolutions", force: :cascade do |t|
-    t.string "height_width"
+    t.string "sha"
+    t.string "ip"
   end
 
   create_table "sources", force: :cascade do |t|
     t.string "identifier"
     t.string "rootUrl"
-  end
-
-  create_table "tracked_sites", force: :cascade do |t|
-    t.string "url"
   end
 
 end

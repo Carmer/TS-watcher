@@ -16,8 +16,9 @@ module TrafficSpy
     end
 
     post '/sources/:identifier/data' do |identifier|
-      
-
+      payload = PayloadValidator.new(params["payload"], identifier)
+      response.body = payload.body
+      response.status = payload.status
     end
   end
 end

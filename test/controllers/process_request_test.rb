@@ -16,13 +16,12 @@ module TrafficSpy
     end
 
     def test_it_processes_a_payload
-      skip
       post '/sources',{"identifier": "jumpstartlab", "rootUrl": "http://jumpstartlab.com"}
 
       payload = {"payload" => {
         "url"=>"http://jumpstartlab.com/blog",
         "requestedAt"=>"2013-02-16 21:38:28 -0700",
-        "respondedIn"=>37,
+        "respondedIn"=>"37",
         "referredBy"=>"http://jumpstartlab.com",
         "requestType"=>"GET",
         "parameters"=>[],
@@ -32,20 +31,17 @@ module TrafficSpy
         "resolutionHeight"=>"1280",
         "ip"=>"63.29.38.211"
       }.to_json}
-
       post '/sources/jumpstartlab/data', payload
       assert_equal 200, last_response.status
     end
 
     def test_it_returns_error_for_duplicate_payloads
-      skip
-
       post '/sources',{"identifier": "jumpstartlab", "rootUrl": "http://jumpstartlab.com"}
 
       payload = {"payload" => {
         "url"=>"http://jumpstartlab.com/blog",
         "requestedAt"=>"2013-02-16 21:38:28 -0700",
-        "respondedIn"=>37,
+        "respondedIn"=>'37',
         "referredBy"=>"http://jumpstartlab.com",
         "requestType"=>"GET",
         "parameters"=>[],
@@ -61,16 +57,15 @@ module TrafficSpy
 
       post '/sources/jumpstartlab/data', payload
       assert_equal 403, last_response.status
-      assert_equal "Cannot save. Duplicate payload", last_response.body
+      assert_equal "Sha has already been taken", last_response.body
     end
 
     def test_it_returns_error_for_nonexistent_url
-      skip
       post '/sources',{"identifier": "jumpstartlab", "rootUrl": "http://jumpstartlab.com"}
       payload = {"payload" => {
         "url"=> nil,
         "requestedAt"=>"2013-02-16 21:38:28 -0700",
-        "respondedIn"=>37,
+        "respondedIn"=>"37",
         "referredBy"=>"http://jumpstartlab.com",
         "requestType"=>"GET",
         "parameters"=>[],
@@ -82,28 +77,26 @@ module TrafficSpy
       }.to_json}
       post '/sources/jumpstartlab/data', payload
       assert_equal 403, last_response.status
-      assert_equal "Tracked site can't be blank", last_response.body
+      assert_equal "Url can't be blank", last_response.body
 
     end
 
     def test_it_returns_error_for_nill_payload_values
-      skip
       post '/sources',{"identifier": nil, "rootUrl": nil}
 
       payload = {"payload" => {}.to_json}
 
       post '/sources/jumpstartlab/data', payload
       assert_equal 400, last_response.status
-      assert_equal "Payload cannot be nil", last_response.body
+      assert_equal "Payload cannot be empty", last_response.body
     end
 
     def test_it_return_error_if_there_is_no_payload
-      skip
       post '/sources', {"identifier": nil, "rootUrl": nil}
 
       post '/sources/jumpstartlab/data'
       assert_equal 400, last_response.status
-      assert_equal "Payload cannot be nil", last_response.body
+      assert_equal "Payload cannot be empty", last_response.body
     end
 
   end
